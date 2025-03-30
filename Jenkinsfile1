@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+
+    environment {
+        
+        DOCKER_COMPOSE_FILE = "docker-compose.yml"
+        EC2_USER = "Docker-instance"
+        EC2_HOST = "3.7.253.30"
+        SSH_KEY = credentials('EC2_SSH_KEY')
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                script {
+                    checkout scm
+                }
+            }
+        }
+
+        stage('Build and Run Containers') {
+            steps {
+                script {
+                    sh 'docker-compose down'
+                    sh 'docker-compose up -d --build'
+                }
+            }
+        }
+
+        stage('Deploy to EC2') {
+            steps {
+                script {
+                    // Copy files to EC2
+                    sh """
+                        scp -i ${SSH_KEY} docker-compose.yml ${EC2_USER}@${EC2_HOST}:~/app/
+                        scp -i ${SSH_KEY} Dockerfile ${EC2_USER}@${EC2_HOST}:~/app/
+                    """
+                    
+                    // SSH into EC2 and run containers
+                    sh """
+                        ssh -i ${SSH_KEY} ${EC2_USER}@${EC2_HOST} << 'EOF'
+                        cd ~/app
+                        docker-compose down
+                        docker-compose up -d --build
+                        EOF
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                sh 'docker-compose down'
+            }
+        }
+    }
+}
