@@ -7,8 +7,8 @@ pipeline {
         IMAGE_NAME = 'weather-app'
         DOCKER_COMPOSE_FILE = 'docker-compose.yml'
         EC2_USER = 'Docker-instance'  // Update based on your AMI
-        EC2_HOST = credentials('access-key')  // Public IP stored in Jenkins
-        EC2_HOST1 = credentials('access-password')  // Public IP stored in Jenkins
+        EC2_HOST ='access-key'  
+        EC2_HOST1 = 'access-password'
     }
 
     stages {
