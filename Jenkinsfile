@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'git@github.com:your-org/your-repo.git'
-        BRANCH = 'main'
-        IMAGE_NAME = 'your-app'
+        REPO_URL = 'https://github.com/vineeth394/weather-app.git'
+        BRANCH = 'faeture-1'
         DOCKER_COMPOSE_FILE = 'docker-compose.yml'
-        EC2_USER = 'ec2-user'  // Update based on your AMI
-        EC2_HOST = credentials('EC2_HOST')  // Public IP stored in Jenkins
+        EC2_USER = 'Docker-instance'  // Update based on your AMI
+        EC2_HOST = credentials('access-key')  // Public IP stored in Jenkins
+        EC2_HOST = credentials('access-password')  // Public IP stored in Jenkins
     }
 
     stages {
