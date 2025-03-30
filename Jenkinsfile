@@ -4,6 +4,7 @@ pipeline {
     environment {
         REPO_URL = 'https://github.com/vineeth394/weather-app.git'
         BRANCH = 'faeture-1'
+        IMAGE_NAME = 'weather-app'
         DOCKER_COMPOSE_FILE = 'docker-compose.yml'
         EC2_USER = 'Docker-instance'  // Update based on your AMI
         EC2_HOST = credentials('access-key')  // Public IP stored in Jenkins
